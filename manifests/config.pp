@@ -16,7 +16,7 @@ class filebeat::config {
       'fields_under_root' => $filebeat::fields_under_root,
       'filebeat'          => {
         'registry_file'      => $filebeat::registry_file,
-        'config.prospectors' => {
+        'config.inputs' => {
           'enabled' => true,
           'path'    => "${filebeat::config_dir}/*.yml",
         },
@@ -78,7 +78,7 @@ class filebeat::config {
     $skip_validation = false
   }
 
-  Filebeat::Prospector <| |> -> File['filebeat.yml']
+  Filebeat::Input <| |> -> File['filebeat.yml']
 
   case $::kernel {
     'Linux'   : {
