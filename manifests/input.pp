@@ -46,11 +46,16 @@ define filebeat::input (
   Boolean $symlinks                  = false,
   Optional[String] $pipeline         = undef,
   Array $processors                  = [],
+  Array $filebeat_config              = [],
 ) {
 
-  $input_template = $filebeat::major_version ? {
-    '5'     => 'prospector5.yml.erb',
-    default => 'prospector.yml.erb',
+  if ! $filebeat_config.empty() {
+    $input_template = 'pure_hash.yml.erb'
+  } else {
+    $input_template = $filebeat::major_version ? {
+      '5'     => 'prospector5.yml.erb',
+      default => 'prospector.yml.erb',
+    }
   }
 
   if $::filebeat_version {
